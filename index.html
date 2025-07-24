@@ -1,389 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turfoholics - Turf Recommender</title>
-    
-    <!-- Tailwind CSS for modern, responsive styling -->
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&family=Lobster&family=Tangerine:wght@400;700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* Custom base styles */
-        body {
-            background-color: #000000;
-            color: #E5E7EB;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
 
-        /* Custom styles for form elements */
-        .custom-select, .custom-input {
-            background-color: #000000;
-            border: 1px solid #4B5563;
-            color: #E5E7EB;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
 
-        .custom-select:focus, .custom-input:focus {
-            outline: none;
-            border-color: #00ffcc;
-            box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.3);
-        }
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
 
-        .custom-select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 1.5em 1.5em;
-            padding-right: 2.5rem;
-        }
-        
-        .custom-input::placeholder {
-            color: #9CA3AF;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        .turf-card {
-            cursor: pointer;
-        }
-    </style>
-
-    <script>
-        // Customizing Tailwind CSS
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'almendra': ['Almendra', 'serif'],
-                        'tinos': ['Tinos', 'serif'],
-                        'lobster': ['Lobster', 'cursive'],
-                        'tangerine': ['Tangerine', 'cursive'],
-                    },
-                    colors: {
-                        'primary': '#00ffcc',
-                        'primary-dark': '#00e6b8',
-                        'brand-dark': '#111827',
-                        'brand-light': '#1F2937',
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="font-tinos">
-
-    <!-- Main Page View -->
-    <div id="main-view">
-        <!-- Navigation Bar -->
-        <nav class="p-4 md:px-8 flex justify-between items-center bg-black/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-gray-800">
-            <div class="brand text-3xl md:text-4xl text-primary font-lobster">Turfoholics</div>
-            <div id="nav-right-container" class="nav-right flex items-center gap-4">
-                 <!-- Login/Logout button will be dynamically inserted here -->
-            </div>
-        </nav>
-
-        <!-- Main Content -->
-        <main class="min-h-screen flex flex-col items-center justify-center p-4 pt-24">
-            <div class="w-full max-w-4xl text-center">
-                
-                <h1 class="text-5xl md:text-6xl font-almendra italic font-bold text-gray-100 mb-8">
-                    Turf. Train. Triumph.
-                </h1>
-                
-                <div class="dropdown-group flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-8">
-                    <select id="sport-select" class="custom-select w-full md:w-60 p-3 rounded-lg text-lg">
-                        <option value="" disabled selected>Select Sport</option>
-                        <option value="football">Football</option>
-                        <option value="cricket">Cricket</option>
-                        <option value="pickleball">PickleBall</option>
-                        <option value="badminton">Badminton</option>
-                    </select>
-
-                    <select id="area-select" class="custom-select w-full md:w-60 p-3 rounded-lg text-lg">
-                        <option value="" disabled selected>Select Area</option>
-                        <option value="eastern-mumbai">Eastern Mumbai</option>
-                        <option value="navi-mumbai">Navi Mumbai</option>
-                        <option value="south-mumbai">South Mumbai</option>
-                        <option value="western-mumbai">Western Mumbai</option>
-                        <option value="northern-mumbai">Northern Mumbai</option>
-                    </select>
-
-                    <div class="budget-input-group w-full md:w-60">
-                        <input type="number" id="budget-input" placeholder="Enter Your Budget" min="0" class="custom-input w-full p-3 rounded-lg text-lg">
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <button id="recommend-btn" class="w-full sm:w-auto recommend-btn bg-primary text-black font-bold text-xl py-3 px-12 rounded-lg transition-all duration-300 transform hover:scale-105 hover:bg-primary-dark shadow-[0_0_15px_rgba(0,255,204,0.5)]">
-                        Recommend
-                    </button>
-                    <button id="view-all-btn" class="w-full sm:w-auto view-all-btn bg-transparent border-2 border-primary text-primary font-bold text-xl py-3 px-12 rounded-lg transition-all duration-300 hover:bg-primary hover:text-black">
-                        View All Turfs
-                    </button>
-                </div>
-            </div>
-        </main>
-
-        <!-- Results Section -->
-        <section id="results-view" class="py-16 px-4 hidden">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-lobster text-primary text-center mb-10">Our Recommendations</h2>
-                <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                </div>
-            </div>
-        </section>
-
-        <!-- All Turfs Section -->
-        <section id="all-turfs-view" class="py-16 px-4 hidden">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-lobster text-primary text-center mb-10">All Available Turfs</h2>
-                <div id="all-turfs-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                </div>
-            </div>
-        </section>
-
-    </div>
-
-    <!-- Login Page View (Initially Hidden) -->
-    <div id="login-view" class="hidden min-h-screen flex flex-col items-center justify-center p-4 bg-black">
-        <button id="back-to-main-btn" class="absolute top-5 left-5 text-primary hover:text-primary-dark transition-colors text-lg">
-            &larr; Back to Home
-        </button>
-
-        <div class="login-container w-full max-w-md bg-brand-dark p-8 rounded-2xl shadow-[0_0_25px_rgba(0,255,204,0.4)]">
-            <h1 class="login-title text-5xl text-primary font-lobster mb-8 text-center">Welcome!</h1>
-            <form id="login-form" class="flex flex-col items-center gap-5 w-full">
-                <div class="form-group w-full">
-                    <label for="username" class="block mb-2 text-lg font-almendra italic text-gray-300">Username</label>
-                    <input type="text" id="username" name="username" required class="custom-input w-full p-3 rounded-lg text-lg">
-                </div>
-                <div class="form-group w-full">
-                    <label for="password" class="block mb-2 text-lg font-almendra italic text-gray-300">Password</label>
-                    <input type="password" id="password" name="password" required class="custom-input w-full p-3 rounded-lg text-lg">
-                </div>
-                 <div class="form-group w-full">
-                    <label for="role-select" class="block mb-2 text-lg font-almendra italic text-gray-300">Login as</label>
-                    <select id="role-select" class="custom-select w-full p-3 rounded-lg text-lg">
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <div class="button-group flex flex-col sm:flex-row gap-4 w-full mt-4">
-                    <button type="submit" class="submit-btn login-btn flex-1 bg-primary text-black py-2.5 rounded-lg font-tangerine text-4xl hover:bg-primary-dark transition-all duration-300 transform hover:translate-y-[-2px]">
-                        Login
-                    </button>
-                </div>
-                <p class="forgot-password mt-6">
-                    <a href="#" class="text-primary hover:underline">Forgot Password?</a>
-                </p>
-            </form>
-        </div>
-    </div>
-
-
-    <!-- Slot Booking Modal -->
-    <div id="slots-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
-        <!-- ... modal content from previous steps will be added back later ... -->
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Mock Databases ---
-            const turfDatabase = [
-                { id: 1, name: 'KICK All Star', sport: 'football', area: 'eastern-mumbai', price: 1500 },
-                { id: 2, name: 'Urban Sports', sport: 'cricket', area: 'western-mumbai', price: 2000 },
-                { id: 3, name: 'PlayZone Arena', sport: 'pickleball', area: 'south-mumbai', price: 1200 },
-                { id: 4, name: 'Smashville', sport: 'badminton', area: 'navi-mumbai', price: 800 },
-                { id: 5, name: 'The Football Hub', sport: 'football', area: 'northern-mumbai', price: 1800 },
-                { id: 6, name: 'Cricket Central', sport: 'cricket', area: 'eastern-mumbai', price: 2200 },
-                { id: 7, name: 'Pickle Pro Courts', sport: 'pickleball', area: 'western-mumbai', price: 1300 },
-                { id: 8, name: 'Shuttle Time', sport: 'badminton', area: 'south-mumbai', price: 900 },
-                { id: 9, name: 'Goal Getters', sport: 'football', area: 'navi-mumbai', price: 1600 },
-                { id: 10, name: 'The Batting Cage', sport: 'cricket', area: 'northern-mumbai', price: 2500 },
-                { id: 11, name: 'Arena 5', sport: 'football', area: 'south-mumbai', price: 2000 },
-                { id: 12, name: 'Gully Cricketers', sport: 'cricket', area: 'navi-mumbai', price: 1800 },
-                { id: 13, name: 'Dink & Smash', sport: 'pickleball', area: 'northern-mumbai', price: 1100 },
-                { id: 14, name: 'Rally Point', sport: 'badminton', area: 'eastern-mumbai', price: 750 },
-                { id: 15, name: 'Soccer City', sport: 'football', area: 'western-mumbai', price: 2200 },
-                { id: 16, name: 'Midwicket Mania', sport: 'cricket', area: 'south-mumbai', price: 2800 },
-                { id: 17, name: 'The Pickle Patch', sport: 'pickleball', area: 'eastern-mumbai', price: 1400 },
-                { id: 18, name: 'Drop Shot Den', sport: 'badminton', area: 'western-mumbai', price: 1000 },
-                { id: 19, name: 'Hat-trick Heroes', sport: 'football', area: 'navi-mumbai', price: 1900 },
-                { id: 20, name: 'Cover Drive Club', sport: 'cricket', area: 'western-mumbai', price: 3000 }
-            ];
-            const userDatabase = [
-                { username: 'dev', password: 'password123', role: 'user' },
-                { username: 'jane', password: 'password456', role: 'user' },
-                { username: 'admin', password: 'adminpass', role: 'admin' }
-            ];
-
-            // --- App State ---
-            let currentUser = null;
-
-            // --- Element Selectors ---
-            const mainView = document.getElementById('main-view');
-            const loginView = document.getElementById('login-view');
-            const navRightContainer = document.getElementById('nav-right-container');
-            const backToMainBtn = document.getElementById('back-to-main-btn');
-            const loginForm = document.getElementById('login-form');
-            
-            // --- Other element selectors from previous steps ---
-            const resultsView = document.getElementById('results-view');
-            const allTurfsView = document.getElementById('all-turfs-view');
-            const recommendBtn = document.getElementById('recommend-btn');
-            const viewAllBtn = document.getElementById('view-all-btn');
-            const resultsContainer = document.getElementById('results-container');
-            const allTurfsContainer = document.getElementById('all-turfs-container');
-            const sportSelect = document.getElementById('sport-select');
-            const areaSelect = document.getElementById('area-select');
-            const budgetInput = document.getElementById('budget-input');
-            const slotsModal = document.getElementById('slots-modal');
-            
-            // --- Core Functions ---
-
-            function updateNav() {
-                navRightContainer.innerHTML = ''; // Clear current nav items
-
-                if (currentUser) {
-                    // User is logged in
-                    const welcomeText = document.createElement('span');
-                    welcomeText.className = 'text-white text-lg hidden sm:inline';
-                    welcomeText.textContent = `Welcome, ${currentUser.username}`;
-                    navRightContainer.appendChild(welcomeText);
-
-                    if (currentUser.role === 'admin') {
-                        const adminBtn = document.createElement('button');
-                        adminBtn.textContent = 'Admin Dashboard';
-                        adminBtn.className = 'text-primary border-2 border-primary rounded-lg px-3 py-1.5 text-lg hover:bg-primary hover:text-black transition-all';
-                        adminBtn.onclick = () => alert('Admin Dashboard clicked!'); // Placeholder action
-                        navRightContainer.appendChild(adminBtn);
-                    }
-
-                    const logoutBtn = document.createElement('button');
-                    logoutBtn.textContent = 'Logout';
-                    logoutBtn.className = 'bg-primary text-black rounded-lg px-4 py-1.5 font-tangerine text-3xl hover:bg-primary-dark transition-all';
-                    logoutBtn.onclick = () => logout();
-                    navRightContainer.appendChild(logoutBtn);
-
-                } else {
-                    // User is logged out
-                    const loginBtn = document.createElement('button');
-                    loginBtn.textContent = 'Login';
-                    loginBtn.className = 'login-btn text-primary border-2 border-primary rounded-lg px-4 py-1.5 font-tangerine text-3xl hover:bg-primary hover:text-black transition-all duration-300';
-                    loginBtn.onclick = () => showLoginView();
-                    navRightContainer.appendChild(loginBtn);
-                }
-            }
-
-            function login(username, password, role) {
-                const user = userDatabase.find(u => u.username === username && u.password === password && u.role === role);
-                if (user) {
-                    currentUser = user;
-                    showMainView();
-                    updateNav();
-                    alert(`Successfully logged in as ${user.role}!`);
-                } else {
-                    alert('Invalid credentials. Please try again.');
-                }
-            }
-
-            function logout() {
-                currentUser = null;
-                updateNav();
-                alert('You have been logged out.');
-            }
-            
-            function showLoginView() {
-                mainView.classList.add('hidden');
-                loginView.classList.remove('hidden');
-            }
-
-            function showMainView() {
-                loginView.classList.add('hidden');
-                mainView.classList.remove('hidden');
-            }
-
-            function createTurfCard(turf) {
-                return `
-                    <div class="turf-card bg-brand-light p-6 rounded-lg shadow-lg border border-gray-700 transform hover:-translate-y-2 transition-transform duration-300" data-id="${turf.id}">
-                        <h3 class="text-2xl font-bold font-almendra text-white mb-2">${turf.name}</h3>
-                        <p class="text-primary text-xl font-bold mb-4">₹${turf.price.toLocaleString()}</p>
-                        <div class="flex justify-between items-center text-gray-400">
-                            <span class="capitalize">${turf.sport}</span>
-                            <span class="capitalize">${turf.area.replace('-', ' ')}</span>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function displayRecommendations(turfs) {
-                resultsContainer.innerHTML = ''; 
-                allTurfsView.classList.add('hidden');
-
-                if (turfs.length === 0) {
-                    resultsContainer.innerHTML = `<p class="text-center text-gray-400 md:col-span-2 lg:col-span-3">No turfs found matching your criteria.</p>`;
-                } else {
-                    turfs.forEach(turf => { resultsContainer.innerHTML += createTurfCard(turf); });
-                }
-                
-                resultsView.classList.remove('hidden');
-                resultsView.scrollIntoView({ behavior: 'smooth' });
-            }
-
-            function displayAllTurfs() {
-                allTurfsContainer.innerHTML = '';
-                resultsView.classList.add('hidden');
-                turfDatabase.forEach(turf => { allTurfsContainer.innerHTML += createTurfCard(turf); });
-                allTurfsView.classList.remove('hidden');
-                allTurfsView.scrollIntoView({ behavior: 'smooth' });
-            }
-
-
-            // --- Event Listeners ---
-            backToMainBtn.addEventListener('click', showMainView);
-
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const username = e.target.username.value;
-                const password = e.target.password.value;
-                const role = e.target.querySelector('#role-select').value;
-                login(username, password, role);
-            });
-
-            recommendBtn.addEventListener('click', () => {
-                const selectedSport = sportSelect.value;
-                const selectedArea = areaSelect.value;
-                const budget = parseFloat(budgetInput.value);
-
-                if (!selectedSport || !selectedArea || isNaN(budget)) {
-                    alert('Please select a sport, an area, and enter a valid budget.');
-                    return;
-                }
-
-                const recommendations = turfDatabase.filter(turf => 
-                    turf.sport === selectedSport && turf.area === selectedArea && turf.price <= budget
-                );
-                displayRecommendations(recommendations);
-            });
-            
-            viewAllBtn.addEventListener('click', () => displayAllTurfs());
-
-            // --- Initialize App ---
-            updateNav(); // Set initial state of the navigation
-        });
-    </script>
-
-</body>
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
 </html>
